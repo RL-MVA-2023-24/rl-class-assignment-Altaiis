@@ -3,7 +3,6 @@ from env_hiv import HIVPatient
 from evaluate import evaluate_HIV
 import numpy as np
 from sklearn.ensemble import ExtraTreesRegressor
-from collections import deque
 import joblib
 
 PATH = "bestmodel.joblib"
@@ -116,10 +115,10 @@ class ProjectAgent:
         print(_+1, evaluate_HIV(agent=self, nb_episode=5) / 1000000)
 
     def save(self, path):
-        joblib.dump(self.Q, "bestmodel.joblib")
+        joblib.dump(self.Q, 'bestmodel.joblib')
 
     def load(self):
-        self.Q = joblib.load("bestmodel.joblib")
+        self.Q = joblib.load('bestmodel.joblib')
 
 if __name__ == "__main__":
     horizon = 2000
