@@ -118,7 +118,7 @@ class ProjectAgent:
         joblib.dump(self.Q, 'bestmodel.joblib')
 
     def load(self):
-        self.Q = joblib.load('bestmodel.joblib')
+        self.Q = joblib.load('./bestmodel.joblib')
 
 if __name__ == "__main__":
     horizon = 2000
