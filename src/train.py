@@ -2,9 +2,8 @@ from gymnasium.wrappers import TimeLimit
 from env_hiv import HIVPatient
 from evaluate import evaluate_HIV
 import numpy as np
-from collections import deque
-from tqdm import tqdm
 from sklearn.ensemble import ExtraTreesRegressor
+from collections import deque
 import joblib
 
 PATH = "bestmodel.joblib"
@@ -40,9 +39,9 @@ class ProjectAgent:
         return np.argmax(Qsa)
 
 
-    def collect_samples(self, horizon, randomness=0.0, disable_tqdm=False, print_done_states=False):
+    def collect_samples(self, horizon, randomness=0.0, print_done_states=False):
         s, _ = self.env.reset()
-        for _ in tqdm(range(horizon), disable=disable_tqdm):
+        for _ in range(horizon):
             if np.random.rand() < randomness:
                 a = self.greedy_action(s)
             else:
@@ -64,7 +63,7 @@ class ProjectAgent:
     
 
     # return the list of Q functions
-    def rf_fqi(self, iterations, disable_tqdm=False, start=False):
+    def rf_fqi(self, iterations, start=False):
         nb_actions = self.env.action_space.n
         nb_samples = len(self.S)
 
@@ -73,7 +72,7 @@ class ProjectAgent:
         SA = np.append(S,A,axis=1)
         Q = self.Q
 
-        for iter in tqdm(range(iterations), disable=disable_tqdm):
+        for iter in range(iterations):
             if iter==0 and Q is None:
                 value=self.R.copy()
             else:
@@ -117,10 +116,10 @@ class ProjectAgent:
         print(_+1, evaluate_HIV(agent=self, nb_episode=5) / 1000000)
 
     def save(self, path):
-        joblib.dump(self.Q, path)
+        joblib.dump(self.Q, "bestmodel.joblib")
 
     def load(self):
-        self.Q = joblib.load(PATH)
+        self.Q = joblib.load("bestmodel.joblib")
 
 if __name__ == "__main__":
     horizon = 2000
